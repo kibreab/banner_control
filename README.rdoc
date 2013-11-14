@@ -1,0 +1,30 @@
+== README
+
+This application is developed entirely be Kibreab Tekle Awono. The application is a banner control system where a user can add banner content, banner slot and link the two. The application also supports features like controlling banner slots, controling banner contents and viewing all slots in a single page. The application also has form validations for required fields
+
+Technologies used to develop the application are
+- Ruby on Rails
+- Mysql
+- relational database
+- html
+- Jquery
+- Ajax
+- Linux
+- Sublime Text 2
+
+
+Few technical details:
+
+* Ruby version : ruby 1.9.3p448 (2013-06-27 revision 41675) [x86_64-darwin12.2.0]
+
+* Rails version : Rails 4.0.0
+
+* System dependencies - Used 2 gems one for image upload(carrierwave) and one for datetimepicker(bootstrap)
+ carrierwave gem uploads images to specified files and puts urls to db, it takes url from webpages eg. .../some_path/pic.png
+
+* Database - Mysql
+
+For more information contact Kibreab @ +358466000614
+
+P.S. I really WISHED to personally explain what is what and discuss on why I developed certain things the way they are. I strongly encourage also a demonstration of the application by me on a meeting. Thank you and wish you all the best !!! 
+

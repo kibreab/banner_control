@@ -1,0 +1,49 @@
+<!-- I used this partial for managing banner contents  -->
+<h1><%= "Listing #{@banner_content.count} Created Banner Contents .."  %> </h1>
+
+<table style="border:1px #ccc solid;width:100%;">
+	    <tr style="background-color:#ccc;">
+       <th>Title</th>
+       <th>Content</th>
+       <th>Image</th>
+       <th>Contact </th>
+       <th>Action </th>
+      </tr>
+  <% @banner_content.each do |bc| %>
+     
+     <tr id="<%= bc.id %>" style="border:2px #ccc solid;">
+       <td><%= bc.title %></td>
+       <td style="max-width:250px;"><%= bc.content %></td>
+       <td><img src="<%= bc.banner_image.url %>" class="img_actual_size" id="<%= bc.id %>" title="See actual size" style="max-width:80px;cursor:pointer;" onClick='$(".img_actual_size").html("<img src="<%= bc.banner_image.url %>" style="max-width:800px;>");' /></td>
+       <td><%= bc.contact %></td>
+       <td>
+        <span id="edit"><img src="/images/edit_icon.png" title="edit banner content" style="max-width:20px;" /></span>
+        <span class="delete_content" id="<%= bc.id %>"><img src="/images/delete_icon.png" id="<%= bc.id %>" title="delete banner content" style="max-width:20px;cursor:pointer;" /></span>
+       </td>
+      </tr>
+   
+  <% end %>
+ </table>
+
+<script>
+$(document).ready(function(){
+  //A place to delete banner content from db
+  $("span.delete_content").click(function(){
+    var obj=event.target.id; 
+   $.ajax({
+     url:"banner/delete_banner_content",
+     data: {id:obj},
+     success:function(response){ 
+       $('tr#'+obj).fadeOut(1000,function(){ 
+          //for more stuff if needed                    
+         }); 
+      }
+   
+   });
+
+
+   });
+
+ });
+
+</script>

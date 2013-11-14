@@ -1,0 +1,15 @@
+<!-- I used this index html to load the first time and show the banner contents to linked slots -->
+<fieldset>
+  <legend>Add Banner</legend>
+  <div style="float:right;">
+	<span class="create_button"><%= link_to "Create Banner Slot", controller: "banner", :action => "add_banner", :type => 'slot' %></span>
+    <span class="create_button"> <%= link_to "Create Banner Content", controller: "banner", :action => "add_banner", :type => 'content' %> </span>
+    <span class="create_button"> <%= link_to "View all banner slots", controller: "banner", :action => "list_slots" %> </span>
+    <span class="create_button"> <%= link_to "Choose slots for banner contents", controller: "banner", :action => "link_banner_content_to_slots" %> </span>
+  </div>
+
+</fieldset>
+
+<%= render :partial => 'banner', :object => @banner %>
+<%= render :partial => 'manage_banner_slot', :object => @banner_slot %>
+<%= render :partial => 'manage_banner_content', :object => @banner_content %>

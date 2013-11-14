@@ -1,0 +1,69 @@
+<!-- I used this html so that the user links a banner content to one or more slots -->
+<fieldset>
+	<legend>Link content to slots</legend>
+	<div style="float:right;">
+	 <span class="create_button"><%= link_to "Create Banner Slot", controller: "banner", :action => "add_banner", :type => 'slot' %></span>
+     <span class="create_button"> <%= link_to "Create Banner Content", controller: "banner", :action => "add_banner", :type => 'content' %> </span>
+   	 <span class="create_button"> <%= link_to "View all banner slots", controller: "banner", :action => "list_slots" %> </span>
+   	 <span class="create_button"> <%= link_to "Choose slots for banner contents", controller: "banner", :action => "link_banner_content_to_slots" %> </span>
+  	</div>
+
+  	<div style="clear:both;"></div>
+	<h1>Choose banner content to be linked to slots ...</h1>
+	<hr></hr>
+	<div style="width:100%;margin-top:20px;min-height:500px;">
+	<%= form_for :banner, :url => {:action => 'link_banner_content'}, :html => { :multipart => true } do |form| %>		
+	<div class="save_cancel float_button"><%= button_tag "Save" %>
+      <span class="cancel"><%= link_to "Cancel", controller: "banner", :action => "index" %></span>
+    </div>  
+
+		<div style="width:50%;float:right;">
+     		<% @banner_slot.each do |bs| %>
+     			<% expired = expired?(bs.valid_to) %>
+     			<div id="<%= bs.id %>" class="slot_info_holder <%= expired ? "expired" : "" %>" >
+      				<div style="text-align:center;">
+      				
+     
+      						<% if expired %>
+      							<!-- <div class="expired"><i><%= " E X P I R E D " %></i></div> -->
+      							<span style="color:#721C1C;"><%= bs.name %><span/>      						
+      						<% else %>
+      							<dt><label><%= check_box_tag('banner_slot_ids[]', bs.id) %></label></dt><dd><%= bs.name %></dd>
+      						<% end %>
+      							
+      					
+      				</div>
+       				<hr></hr>
+
+       				<dd>
+        		 	<% if bs.bgcolor.nil? %>
+          				<img src="<%= bs.bgimage.url %>" style="max-width:200px;cursor:pointer;" />
+        		 	<% else %>
+         		 		<div style="color:#000;padding:10px;background-color:<%= bs.bgcolor %>"><%= bs.bgcolor %></div>
+       			 	<% end %>
+       				</dd>
+
+       				<div><dd>Transparency:<%= bs.transparency %></dd></div>
+       				<div><dd>Valid to: <%= bs.valid_to.to_formatted_s(:long) %></dd></div>
+       				<div><dd>Width: <%= bs.width %></dd></div>
+      				<div><dd>ID: <%= bs.id %></dd></div>
+
+     	 		</div>
+     		<% end %>
+     			
+     	</div>
+		
+		<% @banner_content.each do |bc| %>
+	
+     		<div style="width:30%;border:1px #ccc solid;margin-top:20px;padding:20px;background-color:#F2F4F7;margin: 10px 0px 10px 100px;">
+     			<div style="width:100%;background-color:#DDE2E7;padding: 4px 0 4px 0;"><dt><label><%= radio_button_tag(:banner_content_id, bc.id) %></label></dt><dd><b><%= bc.title.capitalize %></b></dd></div>
+     			<hr></hr>
+     			<img src="<%= bc.banner_image.url %>" style="max-width:80px;" />
+     			<span style="margin-left:10px;"><%= bc.content %></span>
+     		</div>
+   
+		<% end %>
+
+	<% end %>
+	</div>
+</fieldse>

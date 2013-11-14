@@ -1,0 +1,36 @@
+
+  <!-- I used this partial for showing banner contents to linked slots  -->
+  <h1>All The Banners</h1>
+     <div >
+      <% if flash[:success] %>
+        <div class="success_message">
+          <span class="success_image"><img src="/images/success_green.png" style="width:25px;"/></span><%= flash[:success] %>
+        </div>
+      <% end%>
+       <% @banner_content.each do |content| %>
+        <% if content.banner_slots.count != 0 %>
+          
+           <% slots_for_this_content = content.banner_slots %>
+            <% slots_for_this_content.each do |slot| %>
+              <% expired = expired?(slot.valid_to) %>
+              <% next if expired %>
+              <div style="background-color:<%= slot.bgcolor %>;background-image:url('<%= slot.bgimage.url %>');width:40%; opacity:<%= slot.transparency %>; 
+                ;padding:20px;margin: 10px 0px 10px 100px;">
+                <div style="float:right"><p>Contact : </p><dd><%= content.contact %> </dd></div>
+                <h2><%= content.content %> </h2>
+                
+                <p><div style="float:right;"><img src="<%= content.banner_image.url %>" title="" style="max-width:80px;cursor:pointer;" /> </div></p>
+                <div style:'clear:both;'></div>
+                
+                <h1 style="width:42%;"><%= content.title %> </h1>
+
+              </div>
+            <% end %>
+
+           <hr></hr>
+          
+
+        <% end %>
+      <% end %>
+
+     </div>

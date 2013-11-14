@@ -1,0 +1,218 @@
+<!-- I used this html to add new banner slot. Page saves with ajax and more slot can be created -->
+<fieldset>
+  <legend>Create Banner Slot</legend>
+    <div style="float:right;">
+      <span class="create_button" style="float:left;margin-right:10px;"><%= link_to "Create Banner content", controller: "banner", :action => "add_banner", :type => 'content' %></span>
+      <span class="create_button" style="float:left;"><%= link_to "Back to home", controller: "banner", :action => "index" %></span>
+    </div>
+    <div style="clear:both;"></div>
+  <div style="text-align:center;">
+
+  <h1>Create banner slot ..</h1>
+    	<div style="float:left;">
+    		<div class="validation_message" style="display:none;">
+          <span class="error_image"><img src="/images/error_red.png" style="width:25px;"/></span>Please fill in the required field 
+        </div>
+
+        <div class="ajax_loader" style="display:none;">
+          <span class=""><img src="/images/ajaxloader.gif" /></span>
+        </div>
+
+        <div class="success_message" style="display:none;">
+          <span class="success_image"><img src="/images/success_green.png" style="width:25px;"/></span>Successfully created banner slot 
+        </div>
+        
+        <div class="created_content_container" style="display:none;">
+          
+          <table style="border:1px #ccc solid">
+            <tr style="background-color:#CBE9CD;">
+              <th>Name</th>
+              <th>Background</th>
+              <th>Transparency </th>
+              <th>Valid to </th>
+              <th>Banner width </th>
+              <th>Banner height </th>
+            </tr>
+            <tr>
+              <td class="name_append"></td>
+              <td class="bg_append"></td>
+              <td class="transparency_append"></td>
+              <td class="valid_to_append"></td>
+              <td class="width_append"></td>
+              <td class="height_append"></td>
+             </tr>
+          </table>
+
+          <div class="create_button" style="float:right;margin-top:10px;"><%= link_to "View all slots .. ", controller: "banner", :action => "list_slots" %></div>
+        </div>
+
+      <%= form_for :banner_slot, :url => {:action => 'create_banner_slot'}, :html => { :multipart => true } do |form| %>
+     	  
+        <div class="form_holder">
+          <dd><label>Name:<span class="required">*</span></label><%= form.text_field :name %></dd>
+          <dd><label>Transparency:</label><%= form.text_field :transparency %></dd>          
+          <dd><label>Background Color:</label><%= radio_button_tag(:bgstyle, "color") %></dd>
+          <dd id="bgcol" style="display:none;">
+
+           <%= form.select(:bgcolor, defined_colors) %>
+
+          </dd> 
+          <dd><label>Background Image:</label><%= radio_button_tag(:bgstyle, "image") %></dd>  
+          <dd id="bgim" style="display:none;"><%= form.text_field :bgimage %></dd>
+
+
+          <dd class="dimension"><label>Banner width</label><%= form.text_field :banner_width %></dd>
+          <dd class="dimension"><label>Banner height</label><%= form.text_field :banner_height %></dd>
+    
+         <div style="clear:both;"></div>
+
+         <div id="datetimepicker4" class="input-append">
+         <dd><label>Valid to date:</label>
+          banner_slot_valid_to_date
+          <input id="banner_slot_valid_to_date" data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+        
+          <span class="add-on">
+          <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+          </i>
+          </span></dd>
+          </div>
+
+         <div id="datetimepicker3" class="input-append">
+          <dd><label>Valid to time:</label>
+            <input id="banner_slot_valid_to_time" data-format="hh:mm:ss" type="text", readonly ></input>
+          </dd>
+          <span class="add-on">
+           <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+           </i>
+          </span><dd>
+        </div>
+
+     	<% end %>
+    </div>
+</div>
+
+    <div style="clear:both;"></div>
+    <div class="save_cancel"><%= button_tag "Save" %>
+      <span class="cancel"><%= link_to "Cancel", controller: "banner", :action => "index" %></span>
+    </div>  	
+
+</div>
+
+  </div>
+
+</fieldset>
+
+
+<script type="text/javascript">
+  $(function() {
+    $('#datetimepicker4').datetimepicker({
+      language: 'pt-BR'
+      //pickTime: false
+    });
+  });
+  $(function() {
+    $('#datetimepicker3').datetimepicker({
+      pickDate: false
+    });
+  });
+
+  $("[name='bgstyle']").click(function(){
+      var val=event.target.value; 
+      if (val == 'image') {
+        $('#bgcol').hide();
+        $('#bgim').show();
+        $(".dimension").hide();
+      }
+      else{
+        $('#bgcol').show();
+        $('#bgim').hide();
+        $(".dimension").show();
+      }
+
+  })
+
+
+  function validateForm(){
+   var name = $('#banner_slot_name').val();
+    if (name == "" ) {
+     $('.validation_message').fadeIn().delay(2000).fadeOut();
+     return false;
+      }
+    else{
+     return true;
+   }
+  }
+
+  function bgValue(){
+    return $("[name='bgstyle']:checked").val();
+  }
+  function getDimension (dimension) {
+    // function needed to associate dimensions with bgimage cos image doesn't need to be bound by dimension
+    var bgcolor_selected = ($("[name='bgstyle']:checked").val() == 'color');
+    if (bgcolor_selected) {
+      if (dimension == "width" ) {
+        return $('#banner_slot_banner_width').val();
+      }
+      else{
+       return $('#banner_slot_banner_height').val();
+      }
+    }
+  }
+
+$(":button").click(function(){
+  $('.created_content_container').hide();
+  $('.success_message').hide();
+  if (validateForm() == true) {
+    $('.ajax_loader').show();
+  $.ajax({
+    url:"create_banner_slot",
+    data: {
+      name:$('#banner_slot_name').val(),
+      transparency:$('#banner_slot_transparency').val(),
+      width:getDimension('width'),//$('#banner_slot_banner_width').val(),
+      height:getDimension('height'),//$('#banner_slot_banner_height').val(),
+      date:$('#banner_slot_valid_to_date').val(),
+      time:$('#banner_slot_valid_to_time').val(),
+      bgstyle:$('#banner_slot_bg'+bgValue()).val(), //choosing whatever bg the user chose
+      bg_id:$("[name='bgstyle']:checked").val()
+      },
+
+    success:function(response){ 
+      var result = response.banner_slot;
+      //var id = result['id'];
+       var name = result['name'];
+       var transparency = result['transparency'];
+       var width = result['width'];
+       var height = result['height'];
+       var bgcolor = result['bgcolor'];
+       var valid_to = result['valid_to'];
+       var bgimage = result['bgimage']['url'];
+       $('.ajax_loader').fadeOut();
+       $('.success_message').show();
+       $('.created_content_container').fadeIn();
+       $(".name_append").html(name);
+       $(".transparency_append").html(transparency);
+       $(".valid_to_append").html(valid_to);
+       $(".width_append").html(width);
+       $(".height_append").html(height);
+       $(".bg_append").html("").css('background','none');
+       if (bgimage !== null ) {
+        $(".bg_append").html("<img src = "+bgimage+" style='max-width:250px;'>");
+       }
+       else{
+        $(".bg_append")
+          .html('')
+          .css({'background-color': bgcolor,
+                'width': '300px',
+                'padding': '10px'});
+
+       }
+    
+    }});
+    
+  };
+});
+
+
+
+</script>

@@ -1,0 +1,62 @@
+<!-- I used this html to show all banner slots created -->
+<fieldset>
+  <legend>Slots</legend>
+    <div style="float:right;">
+      <span class="create_button"><%= link_to "Create Banner Slot", controller: "banner", :action => "add_banner", :type => 'slot' %></span>
+      <span class="create_button"> <%= link_to "Create Banner Content", controller: "banner", :action => "add_banner", :type => 'content' %> </span>
+      <span class="create_button"> <%= link_to "Manage Banners", controller: "banner", :action => "index", :type => 'content' %> </span>
+     </div>
+     <div style="clear:both;"></div>
+  <h1><%= "Listing #{@banner_slot.count} Created Banner Slots .."  %> </h1>
+
+  <% @banner_slot.each do |bs| %>
+    <% expired = expired?(bs.valid_to) %>
+     
+     <div id="<%= bs.id %>" class="slot_info_holder <%= expired ? "expired" : "" %>">
+       <div style="text-align:center;"><h4><%= bs.name %></h4></div>
+       <hr></hr>
+
+       <dd>
+        <% if bs.bgcolor.nil? %>
+          <img src="<%= bs.bgimage.url %>" style="max-width:200px;cursor:pointer;" />
+        <% else %>
+          <div style="color:#000;padding:10px;background-color:<%= bs.bgcolor %>"><%= bs.bgcolor %></div>
+        <% end %>
+       </dd>
+
+       <div><dd>Transparency:<%= bs.transparency %></dd></div>
+       <div><dd>Valid to: <%= bs.valid_to.to_formatted_s(:long) %></dd></div>
+       <div><dd>Width: <%= bs.width %></dd></div>
+       <div><dd>Height: <%= bs.height %></dd></div>
+
+
+        
+        <!-- <span class="delete_slot" id="<%= bs.id %>"><img src="/images/delete_icon.png" id="<%= bs.id %>" title="delete banner slot" style="max-width:20px;cursor:pointer;float:right;" /></span> -->
+      </div>
+   
+  <% end %>
+</fieldset>
+
+
+<script>
+$(document).ready(function(){
+
+  $(".delete_slot").click(function(){
+    var obj=event.target.id; 
+   $.ajax({
+     url:"banner/delete_banner_slot",
+     data: {id:obj},
+     success:function(response){ 
+       $('div#'+obj).fadeOut(1000,function(){ 
+          //for more stuff;                    
+         }); 
+      }
+   
+   });
+
+   });
+
+
+ });
+
+</script>

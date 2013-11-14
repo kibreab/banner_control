@@ -1,0 +1,112 @@
+<!-- I used this html to add new banner content. Page saves with ajax and more content can be created -->
+<fieldset>
+  <legend>Create Banner Content</legend>
+    <div style="float:right;">
+      <span class="create_button" style="float:left;margin-right:10px;"><%= link_to "Create Banner Slot", controller: "banner", :action => "add_banner", :type => 'slot' %></span>
+      <span class="create_button" style="float:left;"><%= link_to "Back to home", controller: "banner", :action => "index" %></span>
+    </div>
+    <div style="clear:both;"></div>
+
+  <div style="text-align:center;">
+
+  	
+    <h1>Create banner content</h1>
+    	<div style="float:left;">
+    		<div class="validation_message" style="display:none;">
+          <span class="error_image"><img src="/images/error_red.png" style="width:25px;"/></span>Please fill in the required field 
+        </div>
+
+        <div class="ajax_loader" style="display:none;">
+          <span class=""><img src="/images/ajaxloader.gif" /></span>
+        </div>
+
+        <div class="success_message" style="display:none;">
+          <span class="success_image"><img src="/images/success_green.png" style="width:25px;"/></span>Successfully created banner content 
+        </div>
+        
+        <div class="created_content_container" style="display:none;">
+          
+          <table style="border:1px #ccc solid">
+            <tr style="background-color:#CBE9CD;">
+              <th>Title</th>
+              <th>Image</th>
+              <th>Content</th>
+              <th>Contact </th>
+            </tr>
+            <tr>
+              <td class="title_append"></td>
+              <td class="image_append"></td>
+              <td class="content_append"></td>
+              <td class="contact_append"></td>
+             </tr>
+          </table>
+          <div class="create_button" style="float:right;margin-top:10px;">Choose slots for this content</div>
+        </div>
+
+        <div class="form_holder">
+         <%= form_for :banner_content, :url => {:action => 'create_banner_content'}, :html => { :multipart => true } do |form| %>
+     	 
+          <dd><label>Title:<span class="required">*</span></label><%= form.text_field :title %></dd>
+     	    <dd><label>Content:<span class="required">*</span></label><%= form.text_area :content %></dd>  	
+     	    <dd><label>Contact:</label><%= form.text_field :contact %></dd>
+     	    <dd><label>Image URL:</label><%= form.text_field :banner_image %></dd>
+         <% end %>
+          <div class="save_cancel"><%= button_tag "Save" %>
+           <span class="cancel"><%= link_to "Cancel", controller: "banner", :action => "index" %></span>
+          </div> 
+
+    	 </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</fieldset>
+
+
+<script>
+$(document).ready(function(){
+function validateForm(){
+  var title = $('#banner_content_title').val();
+  var content = $('#banner_content_content').val();
+  if (title == "" || content == "") {
+  $('.validation_message').fadeIn().delay(2000).fadeOut();
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+$(":button").click(function(){
+  $('.created_content_container').hide();
+  $('.success_message').hide();
+  
+  if (validateForm() == true) {
+    $('.ajax_loader').show();
+    $.ajax({
+     url:"create_banner_content",
+     data: {title:$('#banner_content_title').val(),content:$('#banner_content_content').val(),banner_image:$('#banner_content_banner_image').val(),contact:$('#banner_content_contact').val()},
+
+     success:function(response){ 
+      var result = response.banner_content
+      //var id = result['id'];
+      var title = result['title'];
+      var content = result['content'];
+      var contact = result['contact'];
+      var url = result['banner_image']['url'];
+      $('.ajax_loader').fadeOut();
+      $('.success_message').show();
+      $('.created_content_container').fadeIn();
+      $(".image_append").html("<img src = "+url+" style='max-width:250px;'>");
+      $(".title_append").html(title);
+      $(".contact_append").html(contact);
+      $(".content_append").html(content);   
+     }});
+    
+  };
+});
+
+});
+</script>

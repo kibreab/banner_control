@@ -1,0 +1,63 @@
+<!-- I used this partial for managing banner slots -->
+<h1><%= "Listing #{@banner_slot.count} Created Banner Slots .."  %> </h1>
+
+<table style="border:1px #ccc solid;width:100%;">
+	    <tr style="background-color:#ccc;">
+        <th>Name</th>
+          <th>Background</th>
+          <th>Transparency </th>
+          <th>Valid to </th>
+          <th>Banner width </th>
+          <th>Banner height </th>
+          <th>Action </th>
+      </tr>
+
+  <% @banner_slot.each do |bs| %>
+     
+     <tr id="<%= bs.id %>" style="border:2px #ccc solid;">
+       <td><%= bs.name %></td>
+
+       <td>
+        <% if bs.bgcolor.nil? %>
+          <img src="<%= bs.bgimage.url %>" style="max-width:200px;cursor:pointer;" />
+        <% else %>
+          <div style="padding:10px;background-color:<%= bs.bgcolor %>"><%= bs.bgcolor %></div>
+        <% end %>
+       </td>
+       <td><%= bs.transparency %></td>
+       <td><%= bs.valid_to.to_time %></td>
+       <td style="max-with:30px;"><%= bs.width %></td>
+       <td style="max-with:30px;"><%= bs.height %></td>
+
+
+       <td>
+        <span id="edit"><img src="/images/edit_icon.png" title="edit banner content" style="max-width:20px;" /></span>
+        <span class="delete_slot" id="<%= bs.id %>"><img src="/images/delete_icon.png" id="<%= bs.id %>" title="delete banner slot" style="max-width:20px;cursor:pointer;" /></span>
+       </td>
+      </tr>
+   
+  <% end %>
+ </table>
+
+<script>
+$(document).ready(function(){
+  //A place to delete banner slot from db
+  $("span.delete_slot").click(function(){
+    var obj=event.target.id; 
+   $.ajax({
+     url:"banner/delete_banner_slot",
+     data: {id:obj},
+     success:function(response){ 
+       $('tr#'+obj).fadeOut(1000,function(){ 
+          //for more stuff if need be                    
+         }); 
+      }
+   
+   });
+
+   });
+
+
+ });
+
+</script>

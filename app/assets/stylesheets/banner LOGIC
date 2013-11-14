@@ -1,0 +1,50 @@
+
+This file is for planning banner LOGIC .. kind of a thinkpad for the develper
+
+Banner slot is added with unique name
+ banner slot table has --- 1. name -- STRING
+ 						   2. bgcolor  --- STRING    Color picker to be done here : https://github.com/kostia/jquery-minicolors-rails
+ 						   3. bgimage  .. IMAGE
+ 						   4. valid_to - DateTime
+ 						   5. banner width - Int
+ 						   6. height - Int
+ 						   7. transparency - Int
+
+ banner_content table has ..... 1. Title  - 'unique'
+ 								2. description/text/content
+ 								3. ID - unique
+ 								4. Contact (optional field)
+ 								5. banner image  - 
+
+
+
+
+
+Class BannerContent
+	has_many :banners
+	has_many :banner_slots, through: :banners
+end
+
+Class BannerSlot 
+	has_many :banners
+	has_many :banner_contents, through: :banners
+end
+
+
+
+Class Banner
+	belongs_to :banner_slot
+	belongs_to :banner_content
+end
+
+#id, banner_content_id, banner_slot_id
+
+banners table ..... 1. banner_content_id
+					2. banner_slot_id
+
+
+					content = BannerContent.first
+					slot = BannerSlot.first
+					content.banners.create(banner_slot:slot)
+
+					content.banner_slots

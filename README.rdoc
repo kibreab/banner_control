@@ -26,5 +26,5 @@ Few technical details:
 
 For more information contact Kibreab @ +358466000614
 
-P.S. I really WISHED to personally explain what is what and discuss on why I developed certain things the way they are. I strongly encourage also a demonstration of the application by me on a meeting. Thank you and wish you all the best !!! 
+P.S. I encourage a demonstration of the application by me. Thank you and wish you all the best !!! 
 
